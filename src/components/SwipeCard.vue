@@ -1,28 +1,11 @@
 <template>
   <div class="swipe-card" :style="{ top: getInitialTopPosition }">
     <div
-      ref="card"
+      ref="swipeCard"
       class="swipe-card-inner-wrapper"
       @touchstart="handleTouchStart"
     >
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Tempora numquam temporibus accusantium eum! Asperiores, quidem.
-        Voluptate harum ducimus delectus officia,
-        alias vitae doloribus praesentium ut sapiente officiis ea ad nihil.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Tempora numquam temporibus accusantium eum! Asperiores, quidem.
-        Voluptate harum ducimus delectus officia,
-        alias vitae doloribus praesentium ut sapiente officiis ea ad nihil.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Tempora numquam temporibus accusantium eum! Asperiores, quidem.
-        Voluptate harum ducimus delectus officia,
-        alias vitae doloribus praesentium ut sapiente officiis ea ad nihil.
-      </p>
+      <slot />
     </div>
   </div>
 </template>
@@ -30,24 +13,33 @@
 <script>
 export default {
   name: 'SwipeCard',
+  props: {
+    initialVisibleValue: {
+      type: Number,
+      required: true,
+    },
+    minVisibleValue: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       initialTouchStartPosition: 0,
       touchStartPosition: 0,
       touchCurrentPosition: 0,
-      initialPxValueOfVisibleCardPart: 250,
-      minPxValueOfVisibleCardPart: 100,
+      minBottomPosition: this.initialVisibleValue - this.minVisibleValue,
     };
   },
   computed: {
     card() {
-      return this.$refs.card;
+      return this.$refs.swipeCard;
     },
     getInitialTopPosition() {
-      return `calc(100% - ${this.initialPxValueOfVisibleCardPart}px)`;
+      return `calc(100% - ${this.initialVisibleValue}px)`;
     },
     getMaxTopPosition() {
-      return -Math.abs(this.card.offsetHeight - this.initialPxValueOfVisibleCardPart);
+      return -Math.abs(this.card.offsetHeight - this.initialVisibleValue);
     },
   },
   mounted() {
@@ -67,8 +59,8 @@ export default {
       }
 
       // limit down swipe
-      if (this.touchCurrentPosition >= this.minPxValueOfVisibleCardPart) {
-        this.touchCurrentPosition = this.minPxValueOfVisibleCardPart;
+      if (this.touchCurrentPosition >= this.minBottomPosition) {
+        this.touchCurrentPosition = this.minBottomPosition;
       }
 
       this.card.style.transform = `translateY(${this.touchCurrentPosition}px)`;
