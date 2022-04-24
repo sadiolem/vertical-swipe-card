@@ -49,13 +49,6 @@ export default {
     getMaxTopPosition() {
       return -Math.abs(this.card.offsetHeight - this.initialPxValueOfVisibleCardPart);
     },
-    getMinBottomPosition() {
-      return Math.abs(
-        window.innerHeight
-          - this.card.offsetHeight
-          - this.initialPxValueOfVisibleCardPart,
-      );
-    },
   },
   mounted() {
     this.card.addEventListener('touchmove', this.handleTouchMove, false);
@@ -72,9 +65,10 @@ export default {
       if (this.touchCurrentPosition <= this.getMaxTopPosition) {
         this.touchCurrentPosition = this.getMaxTopPosition;
       }
+
       // limit down swipe
-      if (this.touchCurrentPosition >= this.getMinBottomPosition) {
-        this.touchCurrentPosition = this.getMinBottomPosition;
+      if (this.touchCurrentPosition >= this.minPxValueOfVisibleCardPart) {
+        this.touchCurrentPosition = this.minPxValueOfVisibleCardPart;
       }
 
       this.card.style.transform = `translateY(${this.touchCurrentPosition}px)`;
