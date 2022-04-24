@@ -47,11 +47,13 @@ export default {
       return `calc(100% - ${this.initialPxValueOfVisibleCardPart}px)`;
     },
   },
+  mounted() {
+    this.card.addEventListener('touchmove', this.handleTouchMove, false);
+  },
   methods: {
     handleTouchStart(e) {
       this.initialTouchStartPosition = e.touches[0].clientY;
       this.touchStartPosition = e.touches[0].clientY - this.touchCurrentPosition;
-      this.card.addEventListener('touchmove', this.handleTouchMove, false);
     },
     handleTouchMove(e) {
       this.touchCurrentPosition = e.changedTouches[0].clientY - this.touchStartPosition;
