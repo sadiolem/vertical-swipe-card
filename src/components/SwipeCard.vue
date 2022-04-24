@@ -72,8 +72,8 @@ export default {
         }
       } else {
         const isMinPartOfCardIsVisible = window.innerHeight
-        - this.card.getBoundingClientRect().top
-        <= this.minPxValueOfVisibleCardPart;
+          - this.card.getBoundingClientRect().top
+          <= this.minPxValueOfVisibleCardPart;
 
         if (isMinPartOfCardIsVisible) {
           // limit down swipe
