@@ -25,7 +25,6 @@ export default {
   },
   data() {
     return {
-      initialTouchStartPosition: 0,
       touchStartPosition: 0,
       touchCurrentPosition: 0,
       minBottomPosition: this.initialVisibleValue - this.minVisibleValue,
@@ -47,7 +46,6 @@ export default {
   },
   methods: {
     handleTouchStart(e) {
-      this.initialTouchStartPosition = e.touches[0].clientY;
       this.touchStartPosition = e.touches[0].clientY - this.touchCurrentPosition;
     },
     handleTouchMove(e) {
