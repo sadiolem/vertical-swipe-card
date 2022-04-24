@@ -73,9 +73,6 @@ export default {
   width: 100%;
 
   .swipe-card-inner-wrapper {
-    position: absolute;
-    top: 0;
-    max-width: 100%;
     padding: 24px;
     border: 1px solid #000;
     touch-action: none;
