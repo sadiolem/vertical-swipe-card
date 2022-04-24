@@ -46,6 +46,16 @@ export default {
     getInitialTopPosition() {
       return `calc(100% - ${this.initialPxValueOfVisibleCardPart}px)`;
     },
+    getMaxTopPosition() {
+      return -Math.abs(this.card.offsetHeight - this.initialPxValueOfVisibleCardPart);
+    },
+    getMinBottomPosition() {
+      return Math.abs(
+        window.innerHeight
+          - this.card.offsetHeight
+          - this.initialPxValueOfVisibleCardPart,
+      );
+    },
   },
   mounted() {
     this.card.addEventListener('touchmove', this.handleTouchMove, false);
@@ -58,33 +68,13 @@ export default {
     handleTouchMove(e) {
       this.touchCurrentPosition = e.changedTouches[0].clientY - this.touchStartPosition;
 
-      const isUpDirection = (this.initialTouchStartPosition - e.changedTouches[0].clientY) > 0;
-
-      if (isUpDirection) {
-        const isFullCardVisible = window.innerHeight
-          - this.card.getBoundingClientRect().bottom >= 0;
-
-        if (isFullCardVisible) {
-          // limit up swipe
-          this.touchCurrentPosition = -Math.abs(
-            this.card.getBoundingClientRect().bottom
-            - this.card.getBoundingClientRect().top
-            - this.initialPxValueOfVisibleCardPart,
-          );
-        }
-      } else {
-        const isMinPartOfCardIsVisible = window.innerHeight
-          - this.card.getBoundingClientRect().top
-          <= this.minPxValueOfVisibleCardPart;
-
-        if (isMinPartOfCardIsVisible) {
-          // limit down swipe
-          this.touchCurrentPosition = Math.abs(
-            window.innerHeight
-            - this.card.getBoundingClientRect().top
-            - this.initialPxValueOfVisibleCardPart,
-          );
-        }
+      // limit up swipe
+      if (this.touchCurrentPosition <= this.getMaxTopPosition) {
+        this.touchCurrentPosition = this.getMaxTopPosition;
+      }
+      // limit down swipe
+      if (this.touchCurrentPosition >= this.getMinBottomPosition) {
+        this.touchCurrentPosition = this.getMinBottomPosition;
       }
 
       this.card.style.transform = `translateY(${this.touchCurrentPosition}px)`;
